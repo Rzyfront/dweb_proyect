@@ -11,7 +11,7 @@ interface RegistroAtencionAttributes {
 
 type RegistroAtencionCreationAttributes = Optional<RegistroAtencionAttributes, 'id'>;
 
-class RegistroAtencion extends Model<RegistroAtencionAttributes, RegistroAtencionCreationAttributes> implements RegistroAtencionAttributes {
+class registro_atencion extends Model<RegistroAtencionAttributes, RegistroAtencionCreationAttributes> implements RegistroAtencionAttributes {
   public id!: number;
   public solicitud_tour_id!: number;
   public estado!: 'confirmado' | 'cancelado' | 'realizado';
@@ -19,7 +19,7 @@ class RegistroAtencion extends Model<RegistroAtencionAttributes, RegistroAtencio
   public comentarios?: string;
 }
 
-RegistroAtencion.init(
+registro_atencion.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -42,10 +42,10 @@ RegistroAtencion.init(
   },
   {
     sequelize,
-    modelName: 'RegistroAtencion',
+    modelName: 'registro_atencion',
     tableName: 'registros_atencion',
     timestamps: false,
   }
 );
 
-export default RegistroAtencion;
+export default registro_atencion;

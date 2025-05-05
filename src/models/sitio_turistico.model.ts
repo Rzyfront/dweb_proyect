@@ -11,7 +11,7 @@ interface SitioTuristicoAttributes {
 
 type SitioTuristicoCreationAttributes = Optional<SitioTuristicoAttributes, 'id' | 'tipo_sitio'>;
 
-class SitioTuristico extends Model<SitioTuristicoAttributes, SitioTuristicoCreationAttributes> implements SitioTuristicoAttributes {
+class sitio_turistico extends Model<SitioTuristicoAttributes, SitioTuristicoCreationAttributes> implements SitioTuristicoAttributes {
   public id!: number;
   public nombre!: string;
   public ubicacion?: string;
@@ -19,7 +19,7 @@ class SitioTuristico extends Model<SitioTuristicoAttributes, SitioTuristicoCreat
   public descripcion?: string;
 }
 
-SitioTuristico.init(
+sitio_turistico.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -39,10 +39,10 @@ SitioTuristico.init(
   },
   {
     sequelize,
-    modelName: 'SitioTuristico',
+    modelName: 'sitio_turistico',
     tableName: 'sitios_turisticos',
     timestamps: false,
   }
 );
 
-export default SitioTuristico;
+export default sitio_turistico;

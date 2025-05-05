@@ -11,7 +11,7 @@ interface PlanTuristicoAttributes {
 
 type PlanTuristicoCreationAttributes = Optional<PlanTuristicoAttributes, 'id'>;
 
-class PlanTuristico extends Model<PlanTuristicoAttributes, PlanTuristicoCreationAttributes> implements PlanTuristicoAttributes {
+class plan_turistico extends Model<PlanTuristicoAttributes, PlanTuristicoCreationAttributes> implements PlanTuristicoAttributes {
   public id!: number;
   public nombre!: string;
   public descripcion?: string;
@@ -19,7 +19,7 @@ class PlanTuristico extends Model<PlanTuristicoAttributes, PlanTuristicoCreation
   public precio!: number;
 }
 
-PlanTuristico.init(
+plan_turistico.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -39,10 +39,10 @@ PlanTuristico.init(
   },
   {
     sequelize,
-    modelName: 'PlanTuristico',
+    modelName: 'plan_turistico',
     tableName: 'planes_turisticos',
     timestamps: false,
   }
 );
 
-export default PlanTuristico;
+export default plan_turistico;

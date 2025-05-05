@@ -13,7 +13,7 @@ interface SolicitudTourAttributes {
 
 type SolicitudTourCreationAttributes = Optional<SolicitudTourAttributes, 'id'>;
 
-class SolicitudTour extends Model<SolicitudTourAttributes, SolicitudTourCreationAttributes> implements SolicitudTourAttributes {
+class solicitud_tour extends Model<SolicitudTourAttributes, SolicitudTourCreationAttributes> implements SolicitudTourAttributes {
   public id!: number;
   public cliente_id!: number;
   public plan_turistico_id!: number;
@@ -23,7 +23,7 @@ class SolicitudTour extends Model<SolicitudTourAttributes, SolicitudTourCreation
   public observaciones?: string;
 }
 
-SolicitudTour.init(
+solicitud_tour.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -54,10 +54,10 @@ SolicitudTour.init(
   },
   {
     sequelize,
-    modelName: 'SolicitudTour',
+    modelName: 'solicitud_tour',
     tableName: 'solicitudes_tour',
     timestamps: false,
   }
 );
 
-export default SolicitudTour;
+export default solicitud_tour;

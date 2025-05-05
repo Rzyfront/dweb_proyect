@@ -12,7 +12,7 @@ interface ClienteAttributes {
 
 type ClienteCreationAttributes = Optional<ClienteAttributes, 'id'>;
 
-class Cliente extends Model<ClienteAttributes, ClienteCreationAttributes> implements ClienteAttributes {
+class cliente extends Model<ClienteAttributes, ClienteCreationAttributes> implements ClienteAttributes {
   public id!: number;
   public nombre!: string;
   public correo!: string;
@@ -21,7 +21,7 @@ class Cliente extends Model<ClienteAttributes, ClienteCreationAttributes> implem
   public nacionalidad?: string;
 }
 
-Cliente.init(
+cliente.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -42,10 +42,10 @@ Cliente.init(
   },
   {
     sequelize,
-    modelName: 'Cliente',
+    modelName: 'cliente',
     tableName: 'clientes',
     timestamps: false,
   }
 );
 
-export default Cliente;
+export default cliente;

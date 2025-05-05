@@ -1,14 +1,14 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database';
 
-class PlanTuristicoSitioTuristico extends Model {
+class plan_turistico_sitio_turistico extends Model {
   public plan_turistico_id!: number;
   public sitio_turistico_id!: number;
   public orden_visita!: number;
   public tiempo_estancia?: number;
 }
 
-PlanTuristicoSitioTuristico.init(
+plan_turistico_sitio_turistico.init(
   {
     plan_turistico_id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -26,10 +26,10 @@ PlanTuristicoSitioTuristico.init(
   },
   {
     sequelize,
-    modelName: 'PlanTuristicoSitioTuristico',
+    modelName: 'plan_turistico_sitio_turistico',
     tableName: 'planes_turisticos_sitios_turisticos',
     timestamps: false,
   }
 );
 
-export default PlanTuristicoSitioTuristico;
+export default plan_turistico_sitio_turistico;
