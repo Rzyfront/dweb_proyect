@@ -11,7 +11,7 @@ export const syncModels = async () => {
   try {
     await sequelize.authenticate();
     // Sincronizar todos los modelos con la base de datos
-    await sequelize.sync({ alter: true }); // Elimina y recrea todas las tablas en la base de datos
+    await sequelize.sync({ force: true }); // Elimina y recrea todas las tablas en la base de datos
     console.log('Database connection and model synchronization successful (force: true).');
   } catch (error) {
     console.error('Error connecting or synchronizing with the database:', error);
