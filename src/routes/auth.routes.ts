@@ -4,7 +4,8 @@ import validate from '../middlewares/validate';
 
 const router = Router();
 
-router.post('/register', validate, register);
-router.post('/login', validate, login);
+// Evita el error de overload matches usando rutas exactas
+router.post('/register', register);
+router.post('/login', login);
 
 export default router;
