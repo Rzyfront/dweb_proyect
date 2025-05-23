@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.7.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/morgan": "^1.9.9",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",

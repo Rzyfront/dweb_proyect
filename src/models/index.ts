@@ -5,7 +5,7 @@ import './TouristSite';
 import './TourRequest';
 import './ServiceRecord';
 import './TourPlanTouristSite';
-import './User';
+import './auth/User';
 
 export const syncModels = async () => {
   try {
