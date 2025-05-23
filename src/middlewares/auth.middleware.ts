@@ -1,27 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../../models/User'; // Ajusta la ruta según tu estructura
-import RefreshToken from '../../models/RefreshToken'; // Ajusta la ruta según tu estructura
-import Role from '../../models/auth/Role';
-import Resource from '../../models/auth/Resource';
-import ResourceRole from '../../models/auth/ResourceRole';
-import { TokenPayload, UserStatus, RefreshTokenStatus, HttpMethod } from '../../types/auth.types'; // Ajusta la ruta
+import User from '../models/auth/User'; // Corregida la ruta
+import RefreshToken from '../models/auth/RefreshToken'; // Corregida la ruta
+import Role from '../models/auth/Role'; // Corregida la ruta
+import Resource from '../models/auth/Resource'; // Corregida la ruta
+import ResourceRole from '../models/auth/ResourceRole'; // Corregida la ruta
+import { TokenPayload, UserStatus, RefreshTokenStatus, HttpMethod } from '../types/auth.types'; // Corregida la ruta
 
-declarations:
-// Extender el objeto Request de Express para incluir la propiedad user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: User;
-    }
-  }
-}
-
-export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'No token provided or token format is incorrect' });
+    res.status(401).json({ message: 'No token provided or token format is incorrect' });
+    return;
   }
 
   const token = authHeader.split(' ')[1];
@@ -34,16 +25,19 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     });
 
     if (!user || user.status !== UserStatus.ACTIVATE) {
-      return res.status(401).json({ message: 'User not found or not active' });
+      res.status(401).json({ message: 'User not found or not active' });
+      return;
     }
 
     req.user = user;
-    return next(); // Token válido y usuario activo
+    next(); 
+    return;
 
   } catch (error: any) {
     if (error.name === 'TokenExpiredError') {
       if (!refreshTokenHeader) {
-        return res.status(401).json({ message: 'Access token expired and no refresh token provided' });
+        res.status(401).json({ message: 'Access token expired and no refresh token provided' });
+        return;
       }
 
       try {
@@ -59,7 +53,8 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
             refreshTokenInstance.status = RefreshTokenStatus.REVOKED;
             await refreshTokenInstance.save();
           }
-          return res.status(401).json({ message: 'Invalid or expired refresh token' });
+          res.status(401).json({ message: 'Invalid or expired refresh token' });
+          return;
         }
 
         const user = await User.findByPk(refreshTokenInstance.user_id, {
@@ -67,33 +62,38 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         });
 
         if (!user || user.status !== UserStatus.ACTIVATE) {
-          return res.status(401).json({ message: 'User associated with refresh token not found or not active' });
+          res.status(401).json({ message: 'User associated with refresh token not found or not active' });
+          return;
         }
 
-        // Generar nuevo token de acceso
         const newAccessToken = user.generateToken();
         res.setHeader('x-access-token', newAccessToken);
         req.user = user;
-        return next();
+        next();
+        return;
 
-      } catch (refreshError) {
-        return res.status(401).json({ message: 'Error processing refresh token', error: refreshError });
+      } catch (refreshError: any) {
+        res.status(401).json({ message: 'Error processing refresh token', error: refreshError.message });
+        return;
       }
     } else {
-      return res.status(401).json({ message: 'Invalid token', error: error.message });
+      res.status(401).json({ message: 'Invalid token', error: error.message });
+      return;
     }
   }
 };
 
 export const authorizeMiddleware = (resourcePath: string, method: HttpMethod) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     if (!req.user) {
-      return res.status(401).json({ message: 'User not authenticated' });
+      res.status(401).json({ message: 'User not authenticated' });
+      return;
     }
 
-    const userRoles = req.user.roles?.map(role => role.id) || [];
+    const userRoles = req.user.roles?.map((role: Role) => role.id) || [];
     if (userRoles.length === 0) {
-      return res.status(403).json({ message: 'User has no assigned roles' });
+      res.status(403).json({ message: 'User has no assigned roles' });
+      return;
     }
 
     try {
@@ -102,25 +102,29 @@ export const authorizeMiddleware = (resourcePath: string, method: HttpMethod) =>
       });
 
       if (!resource) {
-        return res.status(404).json({ message: `Resource not found or inactive: ${method} ${resourcePath}` });
+        res.status(404).json({ message: `Resource not found or inactive: ${method} ${resourcePath}` });
+        return;
       }
 
       const hasPermission = await ResourceRole.findOne({
         where: {
           resource_id: resource.id,
-          role_id: userRoles, // Sequelize buscará si alguna de las role_id coincide
+          role_id: userRoles,
           status: 'ACTIVATE'
         }
       });
 
       if (!hasPermission) {
-        return res.status(403).json({ message: 'User does not have permission for this resource' });
+        res.status(403).json({ message: 'User does not have permission for this resource' });
+        return;
       }
 
-      return next();
-    } catch (error) {
+      next();
+      return;
+    } catch (error: any) {
       console.error('Authorization error:', error);
-      return res.status(500).json({ message: 'Error during authorization' });
+      res.status(500).json({ message: 'Error during authorization', error: error.message });
+      return;
     }
   };
 };

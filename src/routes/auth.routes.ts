@@ -1,33 +1,39 @@
-import { Router } from 'express';
-import { register, login, refreshToken, logout } from '../controllers/auth.controller'; // Ajusta la ruta
-import { authMiddleware } from '../middlewares/auth.middleware'; // Ajusta la ruta
-// import { validate } from '../middlewares/validate'; // Si tienes validaciones específicas
-// import { registerValidator, loginValidator } from '../middlewares/authValidator'; // Si tienes validaciones
+import { Router, Request, Response, NextFunction } from 'express'; // Asegúrate de importar Request, Response, NextFunction
+import authController from '../controllers/auth.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
+import Role from '../models/auth/Role'; // Importa Role para tipar 'r'
 
 const router = Router();
 
 // Rutas de autenticación
-router.post('/register', /* registerValidator, validate, */ register);
-router.post('/login',    /* loginValidator, validate, */ login);
-router.post('/refresh-token', refreshToken);
-router.post('/logout', authMiddleware, logout); // Logout requiere que el usuario esté autenticado para invalidar su refresh token
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+
+// La función refreshToken no está definida como método en la clase AuthController.
+// router.post('/refresh-token', authController.refreshToken); 
+
+router.post('/logout', 
+  authMiddleware, 
+  authController.logout
+);
 
 // Ejemplo de ruta protegida
-router.get('/profile', authMiddleware, (req, res) => {
-  // req.user está disponible aquí gracias a authMiddleware
-  if (req.user) {
-    res.json({
-      message: 'This is a protected profile route',
-      user: {
-        id: req.user.id,
-        username: req.user.username,
-        email: req.user.email,
-        roles: req.user.roles?.map(r => r.name)
-      }
-    });
-  } else {
-    res.status(401).json({ message: 'User not available in request' });
-  }
+router.get('/profile', 
+  authMiddleware, 
+  (req: Request, res: Response) => {
+    if (req.user) {
+      res.json({
+        message: 'This is a protected profile route',
+        user: {
+          id: req.user.id,
+          username: req.user.username,
+          email: req.user.email,
+          roles: req.user.roles?.map((r: Role) => r.name) // Tipar 'r' como Role
+        }
+      });
+    } else {
+      res.status(401).json({ message: 'User not available in request' });
+    }
 });
 
 export default router;
