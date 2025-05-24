@@ -19,11 +19,19 @@ TourPlanTouristSite.init(
       type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       field: 'tour_plan_id',
+      references: {
+        model: 'tour_plans',
+        key: 'id',
+      },
     },
     touristSiteId: {
       type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       field: 'tourist_site_id',
+      references: {
+        model: 'tourist_sites',
+        key: 'id',
+      },
     },
     visitOrder: {
       type: DataTypes.INTEGER,

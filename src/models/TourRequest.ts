@@ -40,11 +40,19 @@ TourRequest.init(
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       field: 'customer_id',
+      references: {
+        model: 'customers',
+        key: 'id',
+      },
     },
     tourPlanId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       field: 'tour_plan_id',
+      references: {
+        model: 'tour_plans',
+        key: 'id',
+      },
     },
     requestDate: {
       type: DataTypes.DATEONLY,

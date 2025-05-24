@@ -34,6 +34,10 @@ ServiceRecord.init(
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       field: 'tour_request_id',
+      references: {
+        model: 'tour_requests',
+        key: 'id',
+      },
     },
     status: {
       type: DataTypes.ENUM('confirmed', 'cancelled', 'completed'),
