@@ -22,6 +22,8 @@ import tourPlanRoutes from './routes/tourPlan.routes';
 import serviceRecordRoutes from './routes/serviceRecord.routes';
 import tourRequestRoutes from './routes/tourRequest.routes';
 import tourPlanTouristSiteRoutes from './routes/tourPlanTouristSite.routes';
+import roleRoutes from './routes/role.routes'; // <--- Nueva importación
+import resourceRoutes from './routes/resource.routes'; // <--- Nueva importación
 import { authenticateJWT } from './middlewares/authenticateJWT';
 
 // Configuración de variables de entorno
@@ -44,6 +46,8 @@ app.use('/api/tour-plans', authenticateJWT, tourPlanRoutes);
 app.use('/api/service-records', authenticateJWT, serviceRecordRoutes);
 app.use('/api/tour-requests', authenticateJWT, tourRequestRoutes);
 app.use('/api/tour-plan-tourist-sites', authenticateJWT, tourPlanTouristSiteRoutes);
+app.use('/api/roles', authenticateJWT, roleRoutes); // <--- Nueva ruta para roles
+app.use('/api/resources', authenticateJWT, resourceRoutes); // <--- Nueva ruta para recursos
 
 app.get('/', (req, res) => {
   const env = process.env.NODE_ENV || 'development';

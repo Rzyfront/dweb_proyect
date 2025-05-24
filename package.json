@@ -20,6 +20,7 @@
     "@types/express-validator": "^3.0.2",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.14.1",
+    "@types/path-to-regexp": "^1.0.29",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   },
@@ -36,6 +37,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.14.1",
+    "path-to-regexp": "^8.2.0",
     "sequelize": "^6.37.7"
   }
 }
