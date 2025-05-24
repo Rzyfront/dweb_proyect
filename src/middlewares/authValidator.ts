@@ -15,9 +15,10 @@ export const registerValidator = [
 ];
 
 export const loginValidator = [
-  body('username')
+  body('email')
     .trim()
-    .notEmpty().withMessage('El usuario es requerido'),
+    .notEmpty().withMessage('El email es requerido')
+    .isEmail().withMessage('Email inválido'),
   body('password')
     .notEmpty().withMessage('La contraseña es requerida')
 ];

@@ -1,39 +1,25 @@
-import { Router, Request, Response, NextFunction } from 'express'; // Asegúrate de importar Request, Response, NextFunction
+import { Router, Request, Response, NextFunction } from 'express';
 import authController from '../controllers/auth.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
-import Role from '../models/auth/Role'; // Importa Role para tipar 'r'
+import { registerValidator, loginValidator } from '../middlewares/authValidator';
+import validate from '../middlewares/validate';
 
 const router = Router();
 
-// Rutas de autenticación
-router.post('/register', authController.register);
-router.post('/login', authController.login);
+// Rutas públicas de autenticación (no requieren autenticación)
+router.post('/register', registerValidator, validate, authController.register);
+router.post('/login', loginValidator, validate, authController.login);
 
-// La función refreshToken no está definida como método en la clase AuthController.
-// router.post('/refresh-token', authController.refreshToken); 
-
+// Rutas protegidas (requieren autenticación y autorización)
 router.post('/logout', 
-  authMiddleware, 
+  authMiddleware,
   authController.logout
 );
 
-// Ejemplo de ruta protegida
+// Ruta protegida para obtener perfil
 router.get('/profile', 
-  authMiddleware, 
-  (req: Request, res: Response) => {
-    if (req.user) {
-      res.json({
-        message: 'This is a protected profile route',
-        user: {
-          id: req.user.id,
-          username: req.user.username,
-          email: req.user.email,
-          roles: req.user.roles?.map((r: Role) => r.name) // Tipar 'r' como Role
-        }
-      });
-    } else {
-      res.status(401).json({ message: 'User not available in request' });
-    }
-});
+  authMiddleware,
+  authController.getProfile
+);
 
 export default router;

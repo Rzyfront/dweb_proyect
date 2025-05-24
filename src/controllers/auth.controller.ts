@@ -148,6 +148,29 @@ class AuthController {
       return;
     }
   }
+
+  public async getProfile(req: Request, res: Response): Promise<void> {
+    try {
+      if (req.user) {
+        res.json({
+          message: 'Perfil de usuario obtenido exitosamente',
+          user: {
+            id: req.user.id,
+            username: req.user.username,
+            email: req.user.email,
+            avatar: req.user.avatar,
+            status: req.user.status,
+            roles: req.user.roles?.map((r: any) => r.name)
+          }
+        });
+      } else {
+        res.status(401).json({ message: 'Usuario no disponible en la solicitud' });
+      }
+    } catch (error: any) {
+      console.error('Get profile error:', error);
+      res.status(500).json({ message: 'Error al obtener el perfil', error: error.message });
+    }
+  }
   
   // La función refreshToken no fue solicitada en la nueva estructura de clase.
   // Si la necesitas, podemos añadirla como un método aquí.
