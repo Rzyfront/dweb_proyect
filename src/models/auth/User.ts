@@ -2,9 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import sequelize from '../../config/database';
-import { UserStatus, TokenPayload, RefreshTokenData } from '../../types/auth.types'; // Asegúrate que la ruta sea correcta
-import Role from './Role'; // Importa el modelo Role
-import RoleUser from './RoleUser'; // Importa el modelo RoleUser
+import { UserStatus, TokenPayload, RefreshTokenData } from '../../types/auth.types';
 
 // Modelo para la tabla users
 export interface UserAttributes {
@@ -31,7 +29,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public readonly updatedAt!: Date;
 
   // Asociaciones
-  public readonly roles?: Role[];
+  public readonly roles?: any[];
 
   // Método para verificar contraseña
   public async checkPassword(password: string): Promise<boolean> {
@@ -127,12 +125,7 @@ User.init(
   }
 );
 
-// Definición de la asociación muchos a muchos entre User y Role
-User.belongsToMany(Role, {
-  through: RoleUser, // Tabla intermedia
-  foreignKey: 'user_id', // Clave foránea en RoleUser que referencia a User
-  otherKey: 'role_id', // Clave foránea en RoleUser que referencia a Role
-  as: 'roles' // Alias para acceder a los roles del usuario
-});
+// Las asociaciones se definen después de que todos los modelos estén inicializados
+// Esto se hará en el archivo index.ts para evitar importaciones circulares
 
 export default User;

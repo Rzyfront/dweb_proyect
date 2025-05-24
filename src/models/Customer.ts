@@ -20,6 +20,9 @@ export class Customer extends Model<CustomerAttributes, CustomerCreationAttribut
   public phone?: string;
   public identityDocument?: string;
   public nationality?: string;
+
+  // Asociaciones
+  public readonly tourRequests?: any[];
 }
 
 Customer.init(

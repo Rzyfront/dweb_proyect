@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import resourceController from '../controllers/resource.controller';
-import { authMiddleware } from '../middlewares/auth.middleware';
+// import { authMiddleware } from '../middlewares/auth.middleware'; // Comentado para quitar auth
 
 const router = Router();
 
-// Middleware de autenticación para todas las rutas de recursos
-router.use(authMiddleware);
+// Middleware de autenticación REMOVIDO - Acceso libre a todas las rutas de recursos
+// router.use(authMiddleware);
 
 // CRUD para Recursos
 router.post('/', resourceController.createResource);

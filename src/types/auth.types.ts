@@ -6,8 +6,8 @@ export enum UserStatus {
 }
 
 export enum RefreshTokenStatus {
-  ACTIVE = 'ACTIVE',
-  REVOKED = 'REVOKED',
+  ACTIVATE = 'ACTIVATE',
+  DEACTIVATE = 'DEACTIVATE',
   EXPIRED = 'EXPIRED'
 }
 

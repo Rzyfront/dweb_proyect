@@ -22,6 +22,11 @@ export class TourRequest extends Model<TourRequestAttributes, TourRequestCreatio
   public tourDate!: Date;
   public peopleCount!: number;
   public notes?: string;
+
+  // Asociaciones
+  public readonly customer?: any;
+  public readonly tourPlan?: any;
+  public readonly serviceRecords?: any[];
 }
 
 TourRequest.init(

@@ -18,6 +18,11 @@ export class TourPlan extends Model<TourPlanAttributes, TourPlanCreationAttribut
   public description?: string;
   public totalDuration?: number;
   public price!: number;
+
+  // Asociaciones
+  public readonly tourRequests?: any[];
+  public readonly touristSites?: any[];
+  public readonly tourPlanTouristSites?: any[];
 }
 
 TourPlan.init(

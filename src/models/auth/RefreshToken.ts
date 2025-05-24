@@ -1,7 +1,6 @@
 import { DataTypes, Model, ForeignKey, BelongsTo } from 'sequelize';
 import sequelize from '../../config/database';
 import { RefreshTokenStatus, DeviceInfo } from '../../types/auth.types';
-import User from './User';
 
 interface RefreshTokenAttributes {
   id?: number;
@@ -23,8 +22,8 @@ class RefreshToken extends Model<RefreshTokenAttributes> implements RefreshToken
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  // Asociaciones
-  public User?: User;
+  // Asociaciones - se definen en src/models/index.ts
+  public User?: any;
 
   // Método para verificar si el token ha expirado
   public isExpired(): boolean {
@@ -33,7 +32,7 @@ class RefreshToken extends Model<RefreshTokenAttributes> implements RefreshToken
 
   // Método para revocar el token
   public async revoke(): Promise<void> {
-    this.status = RefreshTokenStatus.REVOKED;
+    this.status = RefreshTokenStatus.DEACTIVATE;
     await this.save();
   }
 }
@@ -41,12 +40,12 @@ class RefreshToken extends Model<RefreshTokenAttributes> implements RefreshToken
 RefreshToken.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
         model: 'users',
@@ -54,7 +53,7 @@ RefreshToken.init(
       },
     },
     token: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING(512), // Especificamos longitud para poder usar unique
       allowNull: false,
       unique: true,
     },
@@ -65,7 +64,7 @@ RefreshToken.init(
     status: {
       type: DataTypes.ENUM(...Object.values(RefreshTokenStatus)),
       allowNull: false,
-      defaultValue: RefreshTokenStatus.ACTIVE,
+      defaultValue: RefreshTokenStatus.ACTIVATE,
     },
     expires_at: {
       type: DataTypes.DATE,
@@ -80,7 +79,6 @@ RefreshToken.init(
   }
 );
 
-// Asociaciones
-RefreshToken.belongsTo(User, { foreignKey: 'user_id', as: 'User' });
+// Las asociaciones se definen en src/models/index.ts
 
 export default RefreshToken;

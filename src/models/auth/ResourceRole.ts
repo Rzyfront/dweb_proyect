@@ -1,8 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../../config/database'; // Ajusta la ruta según tu estructura
-import { RoleStatus } from '../../types/auth.types'; // Ajusta la ruta según tu estructura
-import Resource from './Resource'; // Ajusta la ruta según tu estructura
-import Role from './Role'; // Ajusta la ruta según tu estructura
+import sequelize from '../../config/database';
+import { RoleStatus } from '../../types/auth.types';
 
 interface ResourceRoleAttributes {
   id?: number;
@@ -24,23 +22,23 @@ class ResourceRole extends Model<ResourceRoleAttributes> implements ResourceRole
 ResourceRole.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
     },
     resource_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
-        model: Resource,
+        model: 'resources',
         key: 'id',
       },
     },
     role_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
-        model: Role,
+        model: 'roles',
         key: 'id',
       },
     },

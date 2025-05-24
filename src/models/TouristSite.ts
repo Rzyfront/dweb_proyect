@@ -18,6 +18,10 @@ export class TouristSite extends Model<TouristSiteAttributes, TouristSiteCreatio
   public location?: string;
   public siteType!: 'natural' | 'cultural' | 'other';
   public description?: string;
+
+  // Asociaciones
+  public readonly tourPlans?: any[];
+  public readonly tourPlanTouristSites?: any[];
 }
 
 TouristSite.init(

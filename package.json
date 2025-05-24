@@ -8,7 +8,9 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "migrate": "ts-node src/scripts/migrate.ts",
+    "seed": "ts-node src/seed/seed.ts"
   },
   "keywords": [],
   "author": "",

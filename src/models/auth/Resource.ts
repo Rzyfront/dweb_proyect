@@ -22,7 +22,7 @@ class Resource extends Model<ResourceAttributes> implements ResourceAttributes {
 Resource.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
     },

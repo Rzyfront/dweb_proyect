@@ -1,10 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../../config/database';
 import { RoleStatus } from '../../types/auth.types';
-import User from './User'; // Importa el modelo User
-import RoleUser from './RoleUser'; // Importa el modelo RoleUser
-import Resource from './Resource'; // Importa el modelo Resource
-import ResourceRole from './ResourceRole'; // Importa el modelo ResourceRole
 
 interface RoleAttributes {
   id?: number;
@@ -20,14 +16,15 @@ class Role extends Model<RoleAttributes> implements RoleAttributes {
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  public readonly users?: User[]; // Para la relación con User
-  public readonly resources?: Resource[]; // Para la relación con Resource
+  // Las asociaciones se definirán en src/models/index.ts
+  public readonly users?: any[];
+  public readonly resources?: any[];
 }
 
 Role.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -50,20 +47,6 @@ Role.init(
   }
 );
 
-// Definición de la asociación muchos a muchos entre Role y User
-Role.belongsToMany(User, {
-  through: RoleUser, // Tabla intermedia
-  foreignKey: 'role_id', // Clave foránea en RoleUser que referencia a Role
-  otherKey: 'user_id', // Clave foránea en RoleUser que referencia a User
-  as: 'users', // Alias para acceder a los usuarios con este rol
-});
-
-// Definición de la asociación muchos a muchos entre Role y Resource
-Role.belongsToMany(Resource, {
-  through: ResourceRole, // Tabla intermedia
-  foreignKey: 'role_id', // Clave foránea en ResourceRole que referencia a Role
-  otherKey: 'resource_id', // Clave foránea en ResourceRole que referencia a Resource
-  as: 'resources', // Alias para acceder a los recursos asociados a este rol
-});
+// Las asociaciones se definen en src/models/index.ts para evitar duplicados
 
 export default Role;

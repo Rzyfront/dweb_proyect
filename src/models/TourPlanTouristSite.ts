@@ -7,6 +7,10 @@ export class TourPlanTouristSite extends Model {
   public touristSiteId!: number;
   public visitOrder!: number;
   public stayTime?: number;
+
+  // Asociaciones
+  public readonly tourPlan?: any;
+  public readonly touristSite?: any;
 }
 
 TourPlanTouristSite.init(

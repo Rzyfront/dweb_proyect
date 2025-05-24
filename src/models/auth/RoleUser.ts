@@ -1,8 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../../config/database'; // Ajusta la ruta según tu estructura
-import { RoleStatus } from '../../types/auth.types'; // Ajusta la ruta según tu estructura
-import User from './User'; // Ajusta la ruta según tu estructura
-import Role from './Role'; // Ajusta la ruta según tu estructura
+import sequelize from '../../config/database';
+import { RoleStatus } from '../../types/auth.types';
 
 interface RoleUserAttributes {
   user_id: number;
@@ -22,18 +20,18 @@ class RoleUser extends Model<RoleUserAttributes> implements RoleUserAttributes {
 RoleUser.init(
   {
     user_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       references: {
-        model: User,
+        model: 'users',
         key: 'id',
       },
     },
     role_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       references: {
-        model: Role,
+        model: 'roles',
         key: 'id',
       },
     },

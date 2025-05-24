@@ -4,14 +4,8 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import sequelize from './config/database'; // Asegúrate que la ruta sea correcta
 
-// Importar modelos para que Sequelize los conozca (especialmente si tienen asociaciones)
-import './models/auth/User';
-import './models/auth/RefreshToken';
-import './models/auth/Role';
-import './models/auth/RoleUser';
-import './models/auth/Resource';
-import './models/auth/ResourceRole';
-// ...otros modelos
+// Importar modelos con asociaciones
+import './models/index'; // ¡IMPORTANTE! Esto inicializa TODAS las asociaciones
 
 // Importar rutas
 import authRoutes from './routes/auth.routes'; // Asegúrate que la ruta sea correcta
@@ -65,7 +59,7 @@ const connectDB = async () => {
     // sequelize.sync() - Crea las tablas si no existen. No borra datos.
     // sequelize.sync({ force: true }) - Borra las tablas existentes y las recrea. ¡CUIDADO EN PRODUCCIÓN!
     // sequelize.sync({ alter: true }) - Intenta alterar las tablas para que coincidan con los modelos.
-    await sequelize.sync({ alter: true }); // O la opción que prefieras para desarrollo/producción
+    await sequelize.sync({ alter: true }); // Configuración normal para desarrollo
     console.log('All models were synchronized successfully.');
   } catch (error) {
     console.error('Unable to connect to the database or synchronize models:', error);

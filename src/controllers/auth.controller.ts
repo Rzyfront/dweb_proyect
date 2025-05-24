@@ -93,11 +93,11 @@ class AuthController {
         // platform: req.headers['sec-ch-ua-platform'] || 'unknown'
       };
 
-      await RefreshToken.create({
+            await RefreshToken.create({
         user_id: user.id,
         token: refreshTokenData.token,
         expires_at: refreshTokenData.expiresAt,
-        status: RefreshTokenStatus.ACTIVE,
+        status: RefreshTokenStatus.ACTIVATE,
         device_info: JSON.stringify(deviceInfo),
       });
 
@@ -131,12 +131,12 @@ class AuthController {
     }
 
     try {
-      const refreshTokenInstance = await RefreshToken.findOne({
-        where: { token: refreshTokenHeader, status: RefreshTokenStatus.ACTIVE },
+            const refreshTokenInstance = await RefreshToken.findOne({
+        where: { token: refreshTokenHeader, status: RefreshTokenStatus.ACTIVATE },
       });
 
       if (refreshTokenInstance) {
-        refreshTokenInstance.status = RefreshTokenStatus.REVOKED; // Usar REVOKED
+        refreshTokenInstance.status = RefreshTokenStatus.DEACTIVATE; // Revocar token
         await refreshTokenInstance.save();
       }
 
@@ -183,10 +183,10 @@ class AuthController {
     }
 
     try {
-        const oldRefreshToken = await RefreshToken.findOne({
+                const oldRefreshToken = await RefreshToken.findOne({
             where: {
                 token: refreshTokenHeader,
-                status: RefreshTokenStatus.ACTIVE,
+                status: RefreshTokenStatus.ACTIVATE,
             },
         });
 

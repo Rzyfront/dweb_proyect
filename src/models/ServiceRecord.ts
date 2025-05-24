@@ -18,6 +18,9 @@ export class ServiceRecord extends Model<ServiceRecordAttributes, ServiceRecordC
   public status!: 'confirmed' | 'cancelled' | 'completed';
   public recordDate!: Date;
   public comments?: string;
+
+  // Asociaciones
+  public readonly tourRequest?: any;
 }
 
 ServiceRecord.init(
