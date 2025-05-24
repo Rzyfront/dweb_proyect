@@ -12,14 +12,16 @@ import {
   getServiceRecordByIdValidator,
   deleteServiceRecordValidator
 } from '../middlewares/serviceRecordValidator';
+import { authMiddleware } from '../middlewares/auth.middleware';
 import validate from '../middlewares/validate';
 
 const router = Router();
 
-router.get('/', getAllServiceRecords);
-router.get('/:id', getServiceRecordByIdValidator, validate, getServiceRecordById);
-router.post('/', createServiceRecordValidator, validate, createServiceRecord);
-router.put('/:id', updateServiceRecordValidator, validate, updateServiceRecord);
-router.delete('/:id', deleteServiceRecordValidator, validate, deleteServiceRecord);
+// Todas las rutas de service records requieren autenticación
+router.get('/', authMiddleware, getAllServiceRecords);
+router.get('/:id', authMiddleware, getServiceRecordByIdValidator, validate, getServiceRecordById);
+router.post('/', authMiddleware, createServiceRecordValidator, validate, createServiceRecord);
+router.put('/:id', authMiddleware, updateServiceRecordValidator, validate, updateServiceRecord);
+router.delete('/:id', authMiddleware, deleteServiceRecordValidator, validate, deleteServiceRecord);
 
 export default router;

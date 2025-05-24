@@ -6,13 +6,15 @@ import {
   updateTourPlanTouristSite,
   deleteTourPlanTouristSite
 } from '../controllers/tourPlanTouristSite.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-router.get('/', getAllTourPlanTouristSites);
-router.get('/:tourPlanId/:touristSiteId', getTourPlanTouristSiteById);
-router.post('/', createTourPlanTouristSite);
-router.put('/:tourPlanId/:touristSiteId', updateTourPlanTouristSite);
-router.delete('/:tourPlanId/:touristSiteId', deleteTourPlanTouristSite);
+// Todas las rutas de tour plan tourist sites requieren autenticación
+router.get('/', authMiddleware, getAllTourPlanTouristSites);
+router.get('/:tourPlanId/:touristSiteId', authMiddleware, getTourPlanTouristSiteById);
+router.post('/', authMiddleware, createTourPlanTouristSite);
+router.put('/:tourPlanId/:touristSiteId', authMiddleware, updateTourPlanTouristSite);
+router.delete('/:tourPlanId/:touristSiteId', authMiddleware, deleteTourPlanTouristSite);
 
 export default router;

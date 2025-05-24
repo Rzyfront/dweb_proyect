@@ -146,34 +146,3 @@ export const validateAuthorization = async (userId: number, resourcePath: string
     return false;
   }
 };
-
-export const authorizeMiddleware = (resourcePathPattern?: string, method?: HttpMethod) => {
-  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    if (!req.user) {
-      res.status(401).json({ message: 'User not authenticated' });
-      return;
-    }
-
-    const userId = req.user.id;
-    const requestPath = resourcePathPattern ? req.baseUrl + (req.route.path === '*' ? '/' + req.params[0] : req.route.path) : req.path; 
-    const requestMethod = method ? method : req.method.toUpperCase() as HttpMethod;
-
-    try {
-      const isAuthorized = await validateAuthorization(userId, requestPath, requestMethod);
-      
-      if (!isAuthorized) {
-        res.status(403).json({ message: 'Access denied. User does not have permission for this resource.' });
-        return;
-      }
-
-      console.log(`User ID: ${userId} has authorized access to ${requestMethod} ${requestPath}`);
-      next();
-      return;
-
-    } catch (error: any) {
-      console.error('Authorization error:', error);
-      res.status(500).json({ message: 'Error during authorization', error: error.message });
-      return;
-    }
-  };
-};

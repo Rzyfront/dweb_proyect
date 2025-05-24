@@ -12,14 +12,16 @@ import {
   getTourRequestByIdValidator,
   deleteTourRequestValidator
 } from '../middlewares/tourRequestValidator';
+import { authMiddleware } from '../middlewares/auth.middleware';
 import validate from '../middlewares/validate';
 
 const router = Router();
 
-router.get('/', getAllTourRequests);
-router.get('/:id', getTourRequestByIdValidator, validate, getTourRequestById);
-router.post('/', createTourRequestValidator, validate, createTourRequest);
-router.put('/:id', updateTourRequestValidator, validate, updateTourRequest);
-router.delete('/:id', deleteTourRequestValidator, validate, deleteTourRequest);
+// Todas las rutas de tour requests requieren autenticación
+router.get('/', authMiddleware, getAllTourRequests);
+router.get('/:id', authMiddleware, getTourRequestByIdValidator, validate, getTourRequestById);
+router.post('/', authMiddleware, createTourRequestValidator, validate, createTourRequest);
+router.put('/:id', authMiddleware, updateTourRequestValidator, validate, updateTourRequest);
+router.delete('/:id', authMiddleware, deleteTourRequestValidator, validate, deleteTourRequest);
 
 export default router;
